@@ -15,7 +15,8 @@ body{
   height: 430px;
   width: 300px;
   border: 11px solid black;
-  margin-left: 750px;
+  margin-left: auto;
+  margin: auto; 
   margin-top: 140px;
   background-color: rgb(131, 34, 131);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,

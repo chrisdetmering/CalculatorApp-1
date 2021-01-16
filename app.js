@@ -105,6 +105,7 @@ const calculate = () => {
 
   setFirstNumberToResult(); 
   displayResult();
+  
 }
 
 document.querySelectorAll(".btn-num.digit").forEach(digitBtn => { 

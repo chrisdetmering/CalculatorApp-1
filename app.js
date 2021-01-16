@@ -82,14 +82,7 @@ const multiply = () => {
 }
 
 const divide = () => { 
-  const result = Number(firstNumber) / Number(secondNumber) 
-
-  if (result === Infinity) { 
-    alert("Can't divide by zero"); 
-    clearDisplay();
-    return; 
-  }
-  return result; 
+  return Number(firstNumber) / Number(secondNumber) 
 }
 
 const calculate = () => {
@@ -103,6 +96,13 @@ const calculate = () => {
 
   const operation = operations[operator]; 
   result = operation();  
+
+  if (result === Infinity) { 
+    alert("Can't divide by zero"); 
+    clearDisplay(); 
+    return; 
+  }
+
   setFirstNumberToResult(); 
   displayResult();
 }

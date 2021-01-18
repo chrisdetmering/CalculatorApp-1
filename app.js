@@ -1,10 +1,8 @@
 const display = document.getElementById('display');
 
-
 let firstNumber = '';
 let operator = null;
 let secondNumber = '';
-
 
 const setFirstNumber = (number) => {
   if(firstNumber.length < 10){
@@ -31,13 +29,11 @@ const addDecimal = (decimal) => {
   } 
 }
 
-
 const clearDisplay = () => {
   display.textContent = 0;
   firstNumber = '';
   secondNumber = '';
   operator = null;
-  
 }
 
 const add = () => { 
@@ -65,7 +61,6 @@ const setFirstNumberToResult = (result) => {
 }
 
 const calculate = () => {
- 
   const operations = { 
     '+':add, 
     '-':subtract, 
@@ -78,8 +73,6 @@ const calculate = () => {
 
   return result; 
 }
-
-
 
 document.querySelectorAll(".btn-num.digit").forEach(digitBtn => { 
   digitBtn.addEventListener("click", event => { 
@@ -94,11 +87,9 @@ document.querySelectorAll(".btn-num.digit").forEach(digitBtn => {
   })
 })
 
-
 document.querySelectorAll(".btn-num.operators-btn").forEach(operatorBtn => { 
   operatorBtn.addEventListener("click", e => { 
     if (!firstNumber) {return; }
-
 
     if (operator && secondNumber) { 
       const result = calculate(); 
@@ -111,7 +102,6 @@ document.querySelectorAll(".btn-num.operators-btn").forEach(operatorBtn => {
     operator = e.target.textContent;
   }) 
 })
-
 
 const btnPoint = document.getElementById('btn-point');
 const btnEqual = document.getElementById('btn-equal');

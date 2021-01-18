@@ -20,7 +20,6 @@ const display = document.getElementById('display');
 let firstNumber = '';
 let operator = null;
 let secondNumber = '';
-let result = null;
 
 
 const setFirstNumber = (number) => {
@@ -48,25 +47,12 @@ const addDecimal = (decimal) => {
   } 
 }
 
-const setFirstNumberToResult = () => { 
-    firstNumber = result.toFixed(3);
-    secondNumber = [];
-}
-
-const displayResult = () => {
-  if(Number.isInteger(result)){
-    display.textContent = result;
-  }else{
-    display.textContent = Number(result).toFixed(3);
-  }   
-}
 
 const clearDisplay = () => {
   display.textContent = 0;
   firstNumber = '';
   secondNumber = '';
   operator = null;
-  result = null; 
   
 }
 
@@ -85,6 +71,18 @@ const divide = () => {
   return Number(firstNumber) / Number(secondNumber) 
 }
 
+const setFirstNumberToResult = (result) => { 
+  if (Number.isInteger(result)) { 
+    firstNumber = `${result}`;
+  } else { 
+    firstNumber = `${result.toFixed(3)}`; 
+  }
+  operator = null;
+  secondNumber = '';
+}
+
+
+
 const calculate = () => {
   if (!secondNumber) { return; }
   const operations = { 
@@ -95,7 +93,7 @@ const calculate = () => {
   }
 
   const operation = operations[operator]; 
-  result = operation();  
+  const result = operation();  
 
   if (result === Infinity) { 
     alert("Can't divide by zero"); 
@@ -103,9 +101,8 @@ const calculate = () => {
     return; 
   }
 
-  setFirstNumberToResult(); 
-  displayResult();
-  
+  setFirstNumberToResult(result); 
+  display.textContent = firstNumber; 
 }
 
 document.querySelectorAll(".btn-num.digit").forEach(digitBtn => { 

@@ -1,11 +1,5 @@
-const btnPoint = document.getElementById('btn-point');
-const btnEqual = document.getElementById('btn-equal');
-const btnMul = document.getElementById('btn-mul');
-const btnDiv = document.getElementById('btn-div');
-const btnPlus = document.getElementById('btn-plus');
-const btnMin = document.getElementById('btn-min');
-const btnCE = document.getElementById('btn-ce');
 const display = document.getElementById('display');
+
 
 let firstNumber = '';
 let operator = null;
@@ -67,14 +61,11 @@ const setFirstNumberToResult = (result) => {
   } else { 
     firstNumber = `${result.toFixed(3)}`; 
   }
-  operator = null;
   secondNumber = '';
 }
 
-
-
 const calculate = () => {
-  if (!secondNumber) { return; }
+ 
   const operations = { 
     '+':add, 
     '-':subtract, 
@@ -85,15 +76,10 @@ const calculate = () => {
   const operation = operations[operator]; 
   const result = operation();  
 
-  if (result === Infinity) { 
-    alert("Can't divide by zero"); 
-    clearDisplay(); 
-    return; 
-  }
-
-  setFirstNumberToResult(result); 
-  display.textContent = firstNumber; 
+  return result; 
 }
+
+
 
 document.querySelectorAll(".btn-num.digit").forEach(digitBtn => { 
   digitBtn.addEventListener("click", event => { 
@@ -105,24 +91,40 @@ document.querySelectorAll(".btn-num.digit").forEach(digitBtn => {
       setSecondNumber(number);
       display.textContent = secondNumber;  
     }
-
-    console.log('firstNumber:' + firstNumber);
-    console.log('operator:'+ operator)
-    console.log('secondNumber:' + secondNumber); 
-
   })
 })
 
 
 document.querySelectorAll(".btn-num.operators-btn").forEach(operatorBtn => { 
   operatorBtn.addEventListener("click", e => { 
+    if (!firstNumber) {return; }
+
+
+    if (operator && secondNumber) { 
+      const result = calculate(); 
+      setFirstNumberToResult(result); 
+      display.textContent = firstNumber; 
+      operator = e.target.textContent;
+      return; 
+    }
+    
     operator = e.target.textContent;
-    calculate(); 
   }) 
 })
 
 
-btnEqual.addEventListener('click', () => {calculate()});
-btnPoint.addEventListener('click',() => {addDecimal('.')});
+const btnPoint = document.getElementById('btn-point');
+const btnEqual = document.getElementById('btn-equal');
+const btnCE = document.getElementById('btn-ce');
 
+btnEqual.addEventListener('click', () => {
+  if (firstNumber && operator && secondNumber) { 
+    const result = calculate(); 
+    setFirstNumberToResult(result); 
+    display.textContent = firstNumber; 
+    operator = null; 
+  }
+});
+
+btnPoint.addEventListener('click',() => {addDecimal('.')});
 btnCE.addEventListener('click', clearDisplay);

@@ -1,41 +1,8 @@
-const btn1 = document.getElementById('btn-1');
-const btn2 = document.getElementById('btn-2');
-const btn3 = document.getElementById('btn-3');
-const btn4 = document.getElementById('btn-4');
-const btn5 = document.getElementById('btn-5');
-const btn6 = document.getElementById('btn-6');
-const btn7 = document.getElementById('btn-7');
-const btn8 = document.getElementById('btn-8');
-const btn9 = document.getElementById('btn-9');
-const btn0 = document.getElementById('btn-0');
-const btnPoint = document.getElementById('btn-point');
-const btnEqual = document.getElementById('btn-equal');
-const btnMul = document.getElementById('btn-mul');
-const btnDiv = document.getElementById('btn-div');
-const btnPlus = document.getElementById('btn-plus');
-const btnMin = document.getElementById('btn-min');
-const btnCE = document.getElementById('btn-ce');
 const display = document.getElementById('display');
 
-let firstNumber = [];
+let firstNumber = '';
 let operator = null;
-let secondNumber = [];
-let result = null;
-
-
-
-
-const getFirstNumber = (number) => {
-  if(firstNumber.length < 10){
-    firstNumber += number;
-  }
-}
-
-const getSecondNumber = (number) => {
-  if(secondNumber.length < 10){
-     secondNumber += number;
-  }
-}
+let secondNumber = '';
 
 const addDecimals = (point) => {
   if(operator === null){
@@ -49,102 +16,77 @@ const addDecimals = (point) => {
   }
 }
 
-const storeValues = (number) => {
-  if(operator === null){
-    getFirstNumber(number);
-    display.textContent = firstNumber; 
-  }else{
-    getSecondNumber(number);
-    display.textContent = secondNumber;  
-  }
-  console.log('firstNumber:' + firstNumber);
-  console.log('operator:'+ operator)
-  console.log('secondNumber:' + secondNumber); 
-}
-
-const substituteResultWithFirstNumberInAdditionAndSubstraction = () => {
-  if(result !== null){
-    firstNumber = result.toFixed(3);
-    secondNumber = [];
-  }
-}
-
-const substituteResultWithFirstNumberInMultiplication = () => {
-  if(result > 0){
-    firstNumber = result.toFixed(3);
-    secondNumber = [];
-  }
-}
-
-const substituteResultWithFirstNumberInDivision = () => {
-  if(result !== Infinity){
-    firstNumber = result.toFixed(3);
-    secondNumber = [];
-  }
-}
-
-const displayResult = () => {
-  if(Number.isInteger(result)){
-    display.textContent = result;
-  }else{
-    display.textContent = Number(result).toFixed(3);
-  }   
-}
 
 const calculate = () => {
-    if(operator === '+'){ 
-      result = Number(firstNumber) + Number(secondNumber)
-      displayResult();
-      substituteResultWithFirstNumberInAdditionAndSubstraction();
-      console.log(result)
-    }else if(operator === '-'){
-      result = Number(firstNumber) - Number(secondNumber)
-      displayResult();
-      substituteResultWithFirstNumberInAdditionAndSubstraction();  
-    }else if(operator === 'x'){
-      result = Number(firstNumber) * Number(secondNumber)
-      displayResult();
-      substituteResultWithFirstNumberInMultiplication();
-    }else if(operator === '÷'){
-      result = Number(firstNumber) / Number(secondNumber)
-      displayResult();
-      substituteResultWithFirstNumberInDivision (); 
-    } 
+  const operations = { 
+    '+':() => Number(firstNumber) + Number(secondNumber), 
+    '-':() => Number(firstNumber) - Number(secondNumber), 
+    'x':() => Number(firstNumber) * Number(secondNumber), 
+    '÷':() => Number(firstNumber) / Number(secondNumber)
+  }
+
+  return operations[operator](); 
 }
 
-btn1.addEventListener('click', () => {storeValues(1)});
-btn2.addEventListener('click', () => {storeValues(2)});
-btn3.addEventListener('click', () => {storeValues(3)});
-btn4.addEventListener('click', () => {storeValues(4)});
-btn5.addEventListener('click', () => {storeValues(5)});
-btn6.addEventListener('click', () => {storeValues(6)});
-btn7.addEventListener('click', () => {storeValues(7)});
-btn8.addEventListener('click', () => {storeValues(8)});
-btn9.addEventListener('click', () => {storeValues(9)});
-btn0.addEventListener('click', () => {storeValues(0)});
+
+document.querySelectorAll(".btn-num.digits").forEach(digitButton => { 
+  digitButton.addEventListener("click", event => { 
+    if (display.textContent.length === 10) { return; }
+    const number = event.target.textContent; 
+
+    if (operator === null){
+      firstNumber += number;
+      display.textContent = firstNumber; 
+      return; 
+    } 
+      secondNumber += number;
+      display.textContent = secondNumber;  
+
+  })
+})
+
+const btnPoint = document.getElementById('btn-point');
 btnPoint.addEventListener('click',() => {addDecimals('.')});
-btnMin.addEventListener('click', (e) => {operator = e.target.textContent;
-calculate()
+
+
+document.querySelectorAll(".btn-num.operators-btn").forEach(operatorButton => { 
+  operatorButton.addEventListener("click", event => { 
+    const currentOperation = event.target.textContent; 
+
+    if (firstNumber && operator && secondNumber) { 
+      const result = calculate(); 
+      firstNumber = `${result}`; 
+      operator = null; 
+      secondNumber = ''; 
+      display.textContent = Number.isInteger(result) ? result : Number(result).toFixed(3); 
+    }
+
+    operator = currentOperation; 
+
+  }) 
+})
+
+const btnEqual = document.getElementById('btn-equal');
+btnEqual.addEventListener('click', () => {
+  if (firstNumber && operator && secondNumber) { 
+    const result = calculate(); 
+    firstNumber = `${result}`; 
+    operator = null; 
+    secondNumber = ''; 
+    display.textContent = Number.isInteger(result) ? result : Number(result).toFixed(3); 
+  }
 });
-btnPlus.addEventListener('click', (e) => {operator = e.target.textContent;
-calculate()
-});
-btnMul.addEventListener('click', (e) => {operator = e.target.textContent; calculate()
-});
-btnDiv.addEventListener('click', (e) => {operator = e.target.textContent; 
-calculate()
-});
-btnEqual.addEventListener('click', () => {calculate()});
 
 
 
 const clearDisplay = () => {
   display.textContent = 0;
-  firstNumber = [];
-  secondNumber = [];
+  firstNumber = '';
+  secondNumber = '';
   operator = null;
   result = null; 
   
 }
 
+const btnCE = document.getElementById('btn-ce');
 btnCE.addEventListener('click', clearDisplay);
